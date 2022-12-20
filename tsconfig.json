@@ -13,6 +13,7 @@
     "baseUrl": "./",
     "paths": {
       "shared/*": ["app/shared/*"],
+      "components/*": ["app/modules/components/*"],
       "app/*": ["app/*/index", "app/*"]
     },
     "noEmit": true,
