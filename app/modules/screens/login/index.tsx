@@ -2,10 +2,12 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { backToTopAppStack } from 'app/modules/navigation';
 import { AuthStackParamList } from 'app/modules/navigation/AppParamsList';
+import { postLoginRequest } from 'app/redux/actions/user';
 import { AppButton } from 'components/button/AppButton';
 import { AppText } from 'components/text/AppText';
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 interface IProps {
 
@@ -13,9 +15,12 @@ interface IProps {
 
 const LoginScreen = React.memo((props: IProps) => {
     const navigation = useNavigation<StackNavigationProp<AuthStackParamList, 'LoginScreen'>>();
+    const dispatch = useDispatch();
+
     const onLogin = useCallback(() => {
         backToTopAppStack();
-    }, [backToTopAppStack]);
+        dispatch(postLoginRequest({ email: 'oke', password: 'oke' }));
+    }, [backToTopAppStack, dispatch]);
 
     const onForgotPassword = useCallback(() => {
         navigation.navigate('ForgotPasswordScreen')
