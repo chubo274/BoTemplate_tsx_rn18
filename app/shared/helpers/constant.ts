@@ -8,6 +8,7 @@ export enum ActionStatus {
 }
 
 export enum StoreKey {
+    User = "User",
 }
 
 export enum DateTimeFormat {
