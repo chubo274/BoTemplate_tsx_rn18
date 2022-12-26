@@ -165,6 +165,7 @@ export default class BaseReducer<State, Action>
             isFetching: false,
             data: this.convertActionDataToReducer(action.payload),
             errorMessage: undefined,
+            error: undefined,
             success: true,
             actionType: action.type,
         };
@@ -188,6 +189,7 @@ export default class BaseReducer<State, Action>
             isFetching: false,
             data: newData,
             errorMessage: undefined,
+            error: undefined,
             success: true,
             actionType: action.type,
             params: {
@@ -216,6 +218,7 @@ export default class BaseReducer<State, Action>
             isFetching: false,
             data: { ...state.data, [sectionId!]: newData },
             errorMessage: undefined,
+            error: undefined,
             success: true,
             actionType: action.type,
             params: {

@@ -45,53 +45,55 @@ export interface IReducer<T> {
 }
 
 export class ResponseModel<T> {
-    code: string;
-    statusCode: number;
+    status: number;
+    statusText: string;
+    data: T;
     isError: boolean;
+    request?: any;
+    headers: any;
+    config: any;
     message?: string;
     rawError?: any;
-    data?: T;
 
     constructor(
-        code = "",
-        statusCode = 0,
+        status: number,
+        statusText: string,
+        data: T,
         isError = false,
-        message?: string,
-        data?: T,
     ) {
-        this.code = code;
-        this.isError = isError;
-        this.message = message;
+        this.status = status;
+        this.statusText = statusText;
         this.data = data;
-        this.statusCode = statusCode;
+        this.isError = isError;
     }
 
-    static createSuccess(data: any): ResponseModel<any> {
-        const response = new ResponseModel();
-        response.data = data;
+    static createSuccess(res: any): ResponseModel<any> {
+        const response = new ResponseModel(200, '200', undefined);
+        response.status = res.number;
+        response.statusText = res.string;
+        response.data = res.data;
         response.isError = false;
-        response.statusCode = 200;
+        response.request = res.request;
+        response.headers = res.headers;
+        response.config = res.config;
         return response;
     }
 
     static createError(
-        statusCode: number,
-        code = "",
+        status: number,
+        statusText: string,
         message?: string,
-        rawError?: any
+        rawError?: any,
     ): ResponseModel<any> {
-        const response = new ResponseModel();
+        const response = new ResponseModel(0, '', undefined);
+        response.status = status;
+        response.statusText = statusText;
         response.isError = true;
-        response.code = code;
         response.message = message;
         response.rawError = rawError;
-        response.statusCode = statusCode;
         return response;
     }
 
-    toString = () => {
-        return this.message;
-    };
 }
 
 // model & interface for 
