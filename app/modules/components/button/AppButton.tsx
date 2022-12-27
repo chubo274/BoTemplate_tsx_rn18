@@ -1,20 +1,20 @@
-import { AppText } from "components/text/AppText";
-import React, { ReactNode } from "react";
-import { StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
-import theme from "shared/theme";
+import { AppText } from 'components/text/AppText'
+import React, { ReactNode } from 'react'
+import { StyleSheet, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
+import theme from 'shared/theme'
 
 interface IAppButton {
-    text?: string;
-    textStyle?: TextStyle;
-    leftIcon?: ReactNode;
-    rightIcon?: ReactNode;
-    style?: ViewStyle;
-    disabled?: boolean;
-    onPress?: () => void;
+    text?: string
+    textStyle?: TextStyle
+    leftIcon?: ReactNode
+    rightIcon?: ReactNode
+    style?: ViewStyle
+    disabled?: boolean
+    onPress?: () => void
 }
 
 export const AppButton = React.memo((props: IAppButton) => {
-    const { text, style, textStyle, disabled, leftIcon, rightIcon, onPress } = props;
+    const { text, style, textStyle, disabled, leftIcon, rightIcon, onPress } = props
     return <TouchableOpacity activeOpacity={0.6}
         style={[styles.defaultTouch, style, disabled && { backgroundColor: theme.color.grey3 }]}
         onPress={onPress}
@@ -22,11 +22,11 @@ export const AppButton = React.memo((props: IAppButton) => {
     >
         {leftIcon}
         <View style={{ height: 4, width: 4 }} />
-        <AppText children={text} style={[styles.defaultText, textStyle, disabled && { color: theme.color.grey2 }]} />
+        <AppText style={[styles.defaultText, textStyle, disabled && { color: theme.color.grey2 }]}>{text}</AppText>
         <View style={{ height: 4, width: 4 }} />
         {rightIcon}
-    </TouchableOpacity>;
-});
+    </TouchableOpacity>
+})
 
 const styles = StyleSheet.create({
     defaultTouch: {
@@ -36,11 +36,11 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         paddingVertical: theme.dimensions.p12,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     defaultText: {
         // fontFamily: theme.font.Bold,
         fontSize: theme.fontSize.p16,
-        color: theme.color.activeBlue,
+        color: theme.color.activeBlue
     },
-});
+})

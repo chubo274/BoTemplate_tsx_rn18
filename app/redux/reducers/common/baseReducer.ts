@@ -1,67 +1,68 @@
-import { IAction, IDictionary, IReducer } from "app/models/common";
-import { ACTION_LIST, ACTION_PREFIX, ACTION_SECTION, FAILED_ACTION, LOADMORE_ACTION, REFRESH_ACTION, SUCCESS_ACTION } from "app/redux/actions/common/actionTypes";
-import { ActionStatus } from "shared/helpers/constant";
+import { IAction, IDictionary, IReducer } from 'app/models/common'
+import { ACTION_LIST, ACTION_PREFIX, ACTION_SECTION, FAILED_ACTION, LOADMORE_ACTION, REFRESH_ACTION, SUCCESS_ACTION } from 'app/redux/actions/common/actionTypes'
+import { ActionStatus } from 'shared/helpers/constant'
 
 export interface IBaseReducer<State, Action> {
-    actionType: string;
-    initialState: IReducer<State>;
-    processFetching: (
-        state: IReducer<State>,
-        action: IAction<Action>
-    ) => IReducer<State>;
-    processSuccess: (
-        state: IReducer<State>,
-        action: IAction<Action>
-    ) => IReducer<State>;
-    processListSuccess: (
-        state: IReducer<State[]>,
-        action: IAction<Action[]>
-    ) => IReducer<State[]>;
-    processFailed: (
-        state: IReducer<State>,
-        action: IAction<Action>
-    ) => IReducer<State>;
-    reducer: (state: IReducer<State>, action: IAction<Action>) => IReducer<State>;
-    // Replace whole process of class
-    customProcess?: (
-        state: IReducer<State>,
-        action: IAction<Action>
-    ) => IReducer<State>;
-    // Run after process of class
-    extraProcess?: (
-        state: IReducer<State>,
-        action: IAction<Action>
-    ) => IReducer<State>;
-    convertActionDataToReducer: (data?: Action) => State | undefined;
+  actionType: string
+  initialState: IReducer<State>
+  processFetching: (
+    state: IReducer<State>,
+    action: IAction<Action>
+  ) => IReducer<State>
+  processSuccess: (
+    state: IReducer<State>,
+    action: IAction<Action>
+  ) => IReducer<State>
+  processListSuccess: (
+    state: IReducer<State[]>,
+    action: IAction<Action[]>
+  ) => IReducer<State[]>
+  processFailed: (
+    state: IReducer<State>,
+    action: IAction<Action>
+  ) => IReducer<State>
+  reducer: (state: IReducer<State>, action: IAction<Action>) => IReducer<State>
+  // Replace whole process of class
+  customProcess?: (
+    state: IReducer<State>,
+    action: IAction<Action>
+  ) => IReducer<State>
+  // Run after process of class
+  extraProcess?: (
+    state: IReducer<State>,
+    action: IAction<Action>
+  ) => IReducer<State>
+  convertActionDataToReducer: (data?: Action) => State | undefined
 }
 
 export default class BaseReducer<State, Action>
-    implements IBaseReducer<State, Action>
-{
+implements IBaseReducer<State, Action> {
     customProcess?: (
-        state: IReducer<State>,
-        action: IAction<Action>
-    ) => IReducer<State>;
-    extraProcess?: (
-        state: IReducer<State>,
-        action: IAction<Action>
-    ) => IReducer<State>;
-    initialState: IReducer<State>;
-    actionType: string;
+    state: IReducer<State>,
+    action: IAction<Action>
+  ) => IReducer<State>
 
-    constructor(
+    extraProcess?: (
+    state: IReducer<State>,
+    action: IAction<Action>
+  ) => IReducer<State>
+
+    initialState: IReducer<State>
+    actionType: string
+
+    constructor (
         actionType: string,
         initialState?: IReducer<State>,
         extraProcess?: (
-            state: IReducer<State>,
-            action: IAction<Action>
-        ) => IReducer<State>,
+      state: IReducer<State>,
+      action: IAction<Action>
+    ) => IReducer<State>,
         customProcess?: (
-            state: IReducer<State>,
-            action: IAction<Action>
-        ) => IReducer<State>
+      state: IReducer<State>,
+      action: IAction<Action>
+    ) => IReducer<State>
     ) {
-        this.actionType = actionType;
+        this.actionType = actionType
         this.initialState = initialState ?? {
             isFetching: false,
             params: undefined,
@@ -69,19 +70,19 @@ export default class BaseReducer<State, Action>
             errorMessage: undefined,
             error: undefined,
             success: false,
-            actionType: "",
-            status: ActionStatus.None,
+            actionType: '',
+            status: ActionStatus.None
         };
-        this.customProcess = customProcess;
-        this.extraProcess = extraProcess;
+        this.customProcess = customProcess
+        this.extraProcess = extraProcess
     }
 
-    private process = (
+    private readonly process = (
         state = this.initialState,
         action: IAction<Action>
     ): IReducer<State> => {
-        if (this.customProcess) return this.customProcess(state, action);
-        const actionType = action.type;
+        if (this.customProcess != null) return this.customProcess(state, action)
+        const actionType = action.type
 
         if (actionType.includes(this.actionType)) {
             if (
@@ -89,34 +90,34 @@ export default class BaseReducer<State, Action>
                 actionType.endsWith(REFRESH_ACTION) ||
                 actionType.endsWith(LOADMORE_ACTION)
             ) {
-                return this.processFetching(state, action);
+                return this.processFetching(state, action)
             }
             if (actionType.endsWith(FAILED_ACTION)) {
-                return this.processFailed(state, action);
+                return this.processFailed(state, action)
             }
 
             if (actionType.endsWith(SUCCESS_ACTION)) {
                 if (actionType.startsWith(ACTION_LIST)) {
-                    //@ts-ignore
-                    return this.processListSuccess(state, action);
+                    // @ts-ignore
+                    return this.processListSuccess(state, action)
                 }
                 if (actionType.startsWith(ACTION_SECTION)) {
-                    //@ts-ignore
-                    return this.processSectionSuccess(state, action);
+                    // @ts-ignore
+                    return this.processSectionSuccess(state, action)
                 }
-                return this.processSuccess(state, action);
+                return this.processSuccess(state, action)
             }
         }
-        if (this.extraProcess) return this.extraProcess(state, action);
-        return state;
+        if (this.extraProcess != null) return this.extraProcess(state, action)
+        return state
     };
 
     convertActionDataToReducer = (data?: Action): State | undefined => {
-        return data as unknown as State;
+        return data as unknown as State
     };
 
     convertActionListDataToReducer = (data?: Action[]): State[] | undefined => {
-        return data as unknown as State[];
+        return data as unknown as State[]
     };
 
     processFetching = (
@@ -126,7 +127,7 @@ export default class BaseReducer<State, Action>
         return {
             ...state,
             status:
-                action.params && action.params.refresh
+                (action.params != null) && action.params.refresh
                     ? ActionStatus.Refreshing
                     : ActionStatus.Fetching,
             isFetching: true,
@@ -136,7 +137,7 @@ export default class BaseReducer<State, Action>
             },
             errorMessage: undefined,
             success: false,
-            actionType: action.type,
+            actionType: action.type
         };
     };
 
@@ -151,7 +152,7 @@ export default class BaseReducer<State, Action>
             errorMessage: action.payload?.message,
             error: action.payload?.rawError,
             success: false,
-            actionType: action.type,
+            actionType: action.type
         };
     };
 
@@ -167,20 +168,20 @@ export default class BaseReducer<State, Action>
             errorMessage: undefined,
             error: undefined,
             success: true,
-            actionType: action.type,
+            actionType: action.type
         };
     };
 
     processListSuccess = (state: IReducer<State[]>, action: IAction<Action[]>): IReducer<State[]> => {
-        let newData = state.data && Array.isArray(state.data) ? [...state.data] : [];
-        const payload = action.payload!;
-        const isAppend = action.params?.isAppend;
-        const canLoadMore = action?.params?.canLoadMore !== undefined ? action.params.canLoadMore : true;
+        let newData = (state.data != null) && Array.isArray(state.data) ? [...state.data] : []
+        const payload = action.payload!
+        const isAppend = action.params?.isAppend
+        const canLoadMore = action?.params?.canLoadMore !== undefined ? action.params.canLoadMore : true
 
         if (isAppend) {
-            newData = newData.concat(this.convertActionListDataToReducer(payload)!);
+            newData = newData.concat(this.convertActionListDataToReducer(payload)!)
         } else {
-            newData = this.convertActionListDataToReducer(payload)!;
+            newData = this.convertActionListDataToReducer(payload)!
         }
 
         return {
@@ -200,16 +201,16 @@ export default class BaseReducer<State, Action>
     };
 
     processSectionSuccess = (state: IReducer<IDictionary<State[]>>, action: IAction<Action[]>): IReducer<IDictionary<State[]>> => {
-        let newData = state.data && Array.isArray(state.data) ? [...state.data] : [];
-        const payload = action.payload!;
-        const isAppend = action.params?.isAppend;
-        const sectionId = action.params?.sectionId;
-        const canLoadMore = action?.params?.canLoadMore !== undefined ? action.params.canLoadMore : true;
+        let newData = (state.data != null) && Array.isArray(state.data) ? [...state.data] : []
+        const payload = action.payload!
+        const isAppend = action.params?.isAppend
+        const sectionId = action.params?.sectionId
+        const canLoadMore = action?.params?.canLoadMore !== undefined ? action.params.canLoadMore : true
 
         if (isAppend) {
-            newData = newData.concat(this.convertActionListDataToReducer(payload)!);
+            newData = newData.concat(this.convertActionListDataToReducer(payload)!)
         } else {
-            newData = this.convertActionListDataToReducer(payload)!;
+            newData = this.convertActionListDataToReducer(payload)!
         }
 
         return {
@@ -233,6 +234,6 @@ export default class BaseReducer<State, Action>
     };
 
     reducer = (state: IReducer<State>, action: IAction<any>): IReducer<State> => {
-        return this.process(state, action);
+        return this.process(state, action)
     };
 }

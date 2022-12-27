@@ -1,45 +1,45 @@
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import ImageSource from 'app/assets/images';
-import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import theme from 'shared/theme';
-import { TabBarIcon } from './TabBarIcon';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+import ImageSource from 'app/assets/images'
+import React from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import theme from 'shared/theme'
+import { TabBarIcon } from './TabBarIcon'
 
 export const CustomTabBar = (props: BottomTabBarProps) => {
-    const { navigation, state, descriptors } = props;
+    const { navigation, state, descriptors } = props
     return (
         <View style={styles.container}>
             {state.routes.map((route, index) => {
-                const { options } = descriptors[route.key];
-                const { name: routeName } = route;
+                const { options } = descriptors[route.key]
+                const { name: routeName } = route
 
-                const isFocused = state.index === index;
+                const isFocused = state.index === index
 
                 const onPress = () => {
                     const event = navigation.emit({
                         type: 'tabPress',
                         target: route.key,
-                        canPreventDefault: true,
-                    });
+                        canPreventDefault: true
+                    })
 
                     if (!isFocused && !event.defaultPrevented) {
                         // The `merge: true` option makes sure that the params inside the tab screen are preserved
-                        navigation.navigate(route);
+                        navigation.navigate(route)
                     }
                 };
 
                 const onLongPress = () => {
                     navigation.emit({
                         type: 'tabLongPress',
-                        target: route.key,
-                    });
+                        target: route.key
+                    })
                 };
 
-                let source: number;
+                let source: number
                 if (routeName === 'HomeTab') {
-                    source = ImageSource.ic_tab_home;
+                    source = ImageSource.ic_tab_home
                 } else {
-                    source = ImageSource.ic_tab_profile;
+                    source = ImageSource.ic_tab_profile
                 }
 
                 return (
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: theme.dimensions.makeResponsiveSize(80),
         backgroundColor: theme.color.tabbarBackgroundColor,
-        paddingBottom: theme.dimensions.makeResponsiveSize(20),
+        paddingBottom: theme.dimensions.makeResponsiveSize(20)
     },
     item: {
         flex: 1,

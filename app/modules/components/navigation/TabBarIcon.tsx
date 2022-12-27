@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Image, ImageStyle, StyleProp, StyleSheet, View } from 'react-native';
-import theme from 'shared/theme';
+import React, { useState } from 'react'
+import { Image, ImageStyle, StyleProp, StyleSheet, View } from 'react-native'
+import theme from 'shared/theme'
 
 interface IProps {
-    source: number;
-    name: string;
-    imgStyle?: StyleProp<ImageStyle>;
+    source: number
+    name: string
+    imgStyle?: StyleProp<ImageStyle>
 }
 
 export const TabBarIcon = React.memo((props: IProps) => {
-    const { source, imgStyle, name } = props;
-    const [badge, setBadge] = useState(0);
+    const { source, imgStyle } = props
+    const [badge,] = useState(0)
 
     // useEffect(() => {
     //     const subscription = EventEmitter.addListener(EventNames.updateTabBarBadge, data => {
@@ -25,15 +25,15 @@ export const TabBarIcon = React.memo((props: IProps) => {
     // }, [name, setBadge]);
 
     return <View>
-        <Image style={[styles.imgIcon, imgStyle]} source={source} resizeMode={'contain'}/>
+        <Image style={[styles.imgIcon, imgStyle]} source={source} resizeMode={'contain'} />
         {badge ? <View style={styles.badge}></View> : null}
-    </View>;
-});
+    </View>
+})
 
 const styles = StyleSheet.create({
     imgIcon: {
         width: theme.dimensions.makeResponsiveSize(23),
-        height: theme.dimensions.makeResponsiveSize(23),
+        height: theme.dimensions.makeResponsiveSize(23)
     },
     badge: {
         position: 'absolute',
@@ -46,6 +46,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 2,
-        borderColor: '#ffffff',
+        borderColor: '#ffffff'
     }
-});
+})

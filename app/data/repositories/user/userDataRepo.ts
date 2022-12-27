@@ -1,9 +1,9 @@
-import ApiGateway from "app/data/api";
-import { baseUrl, urls } from "app/data/api/resource";
-import { ResponseModel } from "app/models/common";
-import { IPostLoginRequest } from "app/models/user/IPostLoginRequest";
-import { UserModel } from "app/models/user/UserModel";
-import { ISessionStorage, localStoreTokenRepo } from "./localStoreTokenRepo";
+import ApiGateway from 'app/data/api'
+import { baseUrl, urls } from 'app/data/api/resource'
+import { ResponseModel } from 'app/models/common'
+import { IPostLoginRequest } from 'app/models/user/IPostLoginRequest'
+import { UserModel } from 'app/models/user/UserModel'
+import { ISessionStorage, localStoreTokenRepo } from './localStoreTokenRepo'
 
 /**
  * Always store token in session storage for faster retrieve
@@ -11,47 +11,47 @@ import { ISessionStorage, localStoreTokenRepo } from "./localStoreTokenRepo";
  */
 
 const SessionStorage: ISessionStorage = {
-    token: '',
-};
+    token: ''
+}
 
 export const userDataRepo = () => {
-    const { setToken, removeToken } = localStoreTokenRepo();
+    const { setToken, removeToken } = localStoreTokenRepo()
 
     const login = async (body: IPostLoginRequest): Promise<ResponseModel<UserModel>> => {
-        const resource = `${baseUrl}${urls.loginEmail}`;
+        const resource = `${baseUrl}${urls.loginEmail}`
         const apiGateway = new ApiGateway({
             method: 'POST',
             resource,
             body: { ...body, grantType: 'password' }
-        });
+        })
 
-        return apiGateway.execute().then(response => {
+        return await apiGateway.execute().then(async response => {
             if (response.data) {
-                response.data = UserModel.parseFromJson(response.data);
+                response.data = UserModel.parseFromJson(response.data)
             }
             // that trust example
             const token: ISessionStorage = { token: response?.data?.token, refreshToken: response?.data?.refreshToken }
-            return setTokenUser(token).then((res) => {
-                return response;
-            });
-        });
+            return await setTokenUser(token).then((res) => {
+                return response
+            })
+        })
     }
 
-    const setTokenUser = (responseParsed: ISessionStorage): Promise<boolean> => {
-        SessionStorage.token = responseParsed?.token ?? '';
-        SessionStorage.refreshToken = responseParsed?.refreshToken ?? '';
-        return setToken(responseParsed);
+    const setTokenUser = async (responseParsed: ISessionStorage): Promise<boolean> => {
+        SessionStorage.token = responseParsed?.token ?? ''
+        SessionStorage.refreshToken = responseParsed?.refreshToken ?? ''
+        return await setToken(responseParsed)
     }
 
     const getTokenUser = (): ISessionStorage => {
-        return SessionStorage;
+        return SessionStorage
     }
 
     const logout = async (): Promise<ResponseModel<boolean>> => {
         SessionStorage.token = '',
-            SessionStorage.refreshToken = '',
-            await removeToken();
-        return ResponseModel.createSuccess(true);
+        SessionStorage.refreshToken = '',
+        await removeToken()
+        return ResponseModel.createSuccess(true)
     }
 
     return {

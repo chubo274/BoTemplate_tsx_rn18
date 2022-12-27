@@ -1,43 +1,43 @@
-import Config from 'app/configs/config';
-import { UserRepository } from 'app/data/repositories/user';
-import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import Interceptor from './Interceptor';
+import Config from 'app/configs/config'
+import { UserRepository } from 'app/data/repositories/user'
+import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import Interceptor from './Interceptor'
 
 type RefreshTokenCallback = (token: string, refreshToken?: string) => void
 
-let isRefreshing = false;
-let refreshSubscribers: RefreshTokenCallback[] = [];
+let isRefreshing = false
+const refreshSubscribers: RefreshTokenCallback[] = []
 
 export class RetryInterceptor extends Interceptor {
-    axiosInstance: AxiosInstance;
-    _userRepository: typeof UserRepository;
+    axiosInstance: AxiosInstance
+    _userRepository: typeof UserRepository
 
     constructor(axiosInstance: AxiosInstance, resource: string, resourceType?: any, setting?: Config) {
-        super(resource, resourceType, setting);
-        this.axiosInstance = axiosInstance;
-        this._userRepository = UserRepository;
+        super(resource, resourceType, setting)
+        this.axiosInstance = axiosInstance
+        this._userRepository = UserRepository
     }
 
     requestFulfilled = (config: AxiosRequestConfig) => {
-        return config;
+        return config
     };
 
-    requestReject = (error: any) => {
-        return Promise.reject(error);
+    requestReject = async (error: any) => {
+        return await Promise.reject(error)
     };
 
     responseFulfilled = (response: AxiosResponse) => {
-        return response;
+        return response
     };
 
-    responseReject = (error: AxiosError) => {
-        let status = 0;
-        if (error.response) {
-            status = error.response.status;
-            const originalRequest = error.config ?? {};
+    responseReject = async (error: AxiosError) => {
+        let status = 0
+        if (error.response != null) {
+            status = error.response.status
+            const originalRequest = error.config ?? {}
             if (status === 401) {
                 if (!isRefreshing) {
-                    isRefreshing = true;
+                    isRefreshing = true
                     // call api refreshToken:
 
                     // this._userRepository.refreshToken()
@@ -50,34 +50,34 @@ export class RetryInterceptor extends Interceptor {
                 const retryOrigReq = new Promise((resolve, reject) => {
                     const handler: RefreshTokenCallback = async (token, refreshToken) => {
                         // replace the expired token and retry
-                        if (!originalRequest?.headers) {
-                            originalRequest.headers = {};
+                        if ((originalRequest?.headers) == null) {
+                            originalRequest.headers = {}
                         }
-                        originalRequest.headers['Authorization'] = 'Bearer ' + token;
+                        originalRequest.headers.Authorization = 'Bearer ' + token
                         await this._userRepository.updateToken([
                             { key: 'token', value: token },
-                            { key: 'refreshToken', value: refreshToken },
-                        ]);
+                            { key: 'refreshToken', value: refreshToken }
+                        ])
 
-                        resolve(this.axiosInstance.request(originalRequest));
+                        resolve(this.axiosInstance.request(originalRequest))
                     };
-                    subscribeTokenRefresh(handler);
-                });
-                return retryOrigReq;
+                    subscribeTokenRefresh(handler)
+                })
+                return await retryOrigReq
             } else {
-                return Promise.reject(error);
+                return await Promise.reject(error)
             }
         }
 
-        return Promise.reject(error);
+        return await Promise.reject(error)
     };
 }
 
 const subscribeTokenRefresh = (cb: RefreshTokenCallback) => {
-    refreshSubscribers.push(cb);
+    refreshSubscribers.push(cb)
 }
 
-const onRefreshed = (token: string, refreshToken?: string) => {
-    refreshSubscribers.map(cb => cb(token, refreshToken));
-    refreshSubscribers = [];
-}
+// const onRefreshed = (token: string, refreshToken?: string) => {
+//     refreshSubscribers.map(cb => cb(token, refreshToken))
+//     refreshSubscribers = []
+// }
