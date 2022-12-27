@@ -1,22 +1,22 @@
-import { StackActions } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import React from 'react';
-import NavigationService from 'shared/helpers/NavigationService';
-import AppStack from './appStack';
-import AuthStack from './authStack';
+import { StackActions } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import React from 'react'
+import NavigationService from 'shared/helpers/NavigationService'
+import AppStack from './appStack'
+import AuthStack from './authStack'
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
 
 interface IProps {
 
 }
 
 export const backToTopAuthStack = () => {
-    NavigationService.topLevelNavigator?.dispatch(StackActions.replace('Auth'));
+    NavigationService.topLevelNavigator?.dispatch(StackActions.replace('Auth'))
 }
 
 export const backToTopAppStack = () => {
-    NavigationService.topLevelNavigator?.dispatch(StackActions.replace('App'));
+    NavigationService.topLevelNavigator?.dispatch(StackActions.replace('App'))
 }
 
 const RootStack = (props: IProps) => {
@@ -31,7 +31,7 @@ const RootStack = (props: IProps) => {
     >
         <Stack.Screen name={'App'} component={AppStack} />
         <Stack.Screen name={'Auth'} component={AuthStack} />
-    </Stack.Navigator>;
-};
+    </Stack.Navigator>
+}
 
-export default RootStack;
+export default RootStack

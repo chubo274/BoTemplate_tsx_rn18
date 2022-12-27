@@ -1,17 +1,17 @@
-import { CommonActions, NavigationContainerRef, NavigationState, PartialState, Route, StackActions } from '@react-navigation/native';
+import { CommonActions, NavigationContainerRef, NavigationState, PartialState, Route, StackActions } from '@react-navigation/native'
 
-type AllRoutes = any;
+type AllRoutes = any
 
 declare type ResetState = PartialState<NavigationState> | NavigationState | (Omit<NavigationState, 'routes'> & {
-    routes: Omit<Route<string>, 'key'>[];
-});
+  routes: Array<Omit<Route<string>, 'key'>>
+})
 export default class NavigationService {
-    static topLevelNavigator?: NavigationContainerRef<any>;
+    static topLevelNavigator?: NavigationContainerRef<any>
 
-    static setTopLevelNavigator = (ref: NavigationContainerRef<any>) => NavigationService.topLevelNavigator = ref;
+    static setTopLevelNavigator = (ref: NavigationContainerRef<any>) => NavigationService.topLevelNavigator = ref
 
     static reset = (resetState: ResetState | undefined) => {
-        if (NavigationService.topLevelNavigator) {
+        if (NavigationService.topLevelNavigator != null) {
             NavigationService.topLevelNavigator.dispatch(
                 CommonActions.reset(resetState)
             );
@@ -19,7 +19,7 @@ export default class NavigationService {
     };
 
     static navigate = (routeName: keyof AllRoutes, params?: any) => {
-        if (NavigationService.topLevelNavigator && routeName) {
+        if ((NavigationService.topLevelNavigator != null) && routeName) {
             NavigationService.topLevelNavigator.dispatch(
                 CommonActions.navigate({
                     name: routeName.toString(),
@@ -30,7 +30,7 @@ export default class NavigationService {
     };
 
     static push = (routeName: keyof AllRoutes, params?: any) => {
-        if (NavigationService.topLevelNavigator && routeName) {
+        if ((NavigationService.topLevelNavigator != null) && routeName) {
             NavigationService.topLevelNavigator.dispatch(
                 StackActions.push(routeName.toString(), params)
             );
@@ -38,7 +38,7 @@ export default class NavigationService {
     };
 
     static pop = () => {
-        if (NavigationService.topLevelNavigator) {
+        if (NavigationService.topLevelNavigator != null) {
             NavigationService.topLevelNavigator.dispatch(
                 CommonActions.goBack()
             );
@@ -46,7 +46,7 @@ export default class NavigationService {
     };
 
     static popToTop = () => {
-        if (NavigationService.topLevelNavigator) {
+        if (NavigationService.topLevelNavigator != null) {
             NavigationService.topLevelNavigator.dispatch(
                 StackActions.popToTop()
             );
@@ -54,7 +54,7 @@ export default class NavigationService {
     };
 
     static replace = (routeName: keyof AllRoutes, params?: any) => {
-        if (NavigationService.topLevelNavigator) {
+        if (NavigationService.topLevelNavigator != null) {
             NavigationService.topLevelNavigator.dispatch(
                 StackActions.replace(routeName.toString(), params)
             );

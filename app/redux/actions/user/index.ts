@@ -1,12 +1,12 @@
-import { IAction, IActionCallBacks, IActionParams } from "app/models/common";
-import { IPostLoginRequest } from "app/models/user/IPostLoginRequest";
-import { UserModel } from "app/models/user/UserModel";
-import { LOGOUT_USER, POST_LOGIN } from "../common/actionTypes";
-import { createActionNormalTypes } from "../common/helper";
+import { IAction, IActionCallBacks, IActionParams } from 'app/models/common'
+import { IPostLoginRequest } from 'app/models/user/IPostLoginRequest'
+import { UserModel } from 'app/models/user/UserModel'
+import { LOGOUT_USER, POST_LOGIN } from '../common/actionTypes'
+import { createActionNormalTypes } from '../common/helper'
 
 /// LOGIN
-export const loginEmailTypes = POST_LOGIN;
-export const loginEmailActionTypes = createActionNormalTypes(loginEmailTypes);
+export const loginEmailTypes = POST_LOGIN
+export const loginEmailActionTypes = createActionNormalTypes(loginEmailTypes)
 
 export const postLoginRequest = (
     payload: IPostLoginRequest,
@@ -38,8 +38,8 @@ export const postLoginFailed = (
 })
 
 /// LOGOUT
-export const logOutTypes = LOGOUT_USER;
-export const logOutActionTypes = createActionNormalTypes(logOutTypes);
+export const logOutTypes = LOGOUT_USER
+export const logOutActionTypes = createActionNormalTypes(logOutTypes)
 
 export const logoutUser = (): IAction<any> => ({
     type: logOutActionTypes.start

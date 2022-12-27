@@ -1,30 +1,28 @@
 // stack in tab bar
-export type AppTabParamList = {
-    HomeTab: undefined;
-    ProfileTab: undefined;
+export interface AppTabParamList {
+    HomeTab: undefined
+    ProfileTab: undefined
 }
 
 export type HomeStackParamList = {
-    HomeScreen: undefined;
+    HomeScreen: undefined
 } & AppStackParamList & AppTabParamList;
 
 export type ProfileStackParamList = {
-    ProfileScreen: undefined;
+    ProfileScreen: undefined
 } & AppStackParamList & AppTabParamList;
-
 
 // all screen had auth
 export type AppStackParamList = {
-    AppTab: undefined,
-    HomeScreen: undefined,
-    ProfileScreen: undefined,
+    AppTab: undefined
+    HomeScreen: undefined
+    ProfileScreen: undefined
 } & AppTabParamList;
-
 
 // all screen no had auth
 export type AuthStackParamList = {
-    LoginScreen: undefined,
-    ForgotPasswordScreen: undefined,
-};
+    LoginScreen: undefined
+    ForgotPasswordScreen: undefined
+}
 
 export type AllRouteParamList = AppStackParamList & AuthStackParamList;

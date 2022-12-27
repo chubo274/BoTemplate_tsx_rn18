@@ -1,24 +1,23 @@
-import Config from 'app/configs/config';
-import { UserRepository } from 'app/data/repositories/user';
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import qs from 'qs';
-import Interceptor from './Interceptor';
+import Config from 'app/configs/config'
+import { UserRepository } from 'app/data/repositories/user'
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
+import qs from 'qs'
+import Interceptor from './Interceptor'
 
 export default class AuthenticationInterceptor extends Interceptor {
+    _userRepository: typeof UserRepository
 
-    _userRepository: typeof UserRepository;
+    constructor (resource: string, resourceType?: any, setting?: Config) {
+        super(resource, resourceType, setting)
 
-    constructor(resource: string, resourceType?: any, setting?: Config) {
-        super(resource, resourceType, setting);
-
-        this._userRepository = UserRepository;
+        this._userRepository = UserRepository
     }
 
     getTokenFromType = (type?: any): string => {
-        const userData = this._userRepository.getTokenUser();
+        const userData = this._userRepository.getTokenUser()
         switch (type) {
             default:
-                return userData?.token ?? '';
+                return userData?.token ?? ''
         }
     };
 
@@ -28,37 +27,37 @@ export default class AuthenticationInterceptor extends Interceptor {
      * @return {AxiosRequestConfig}
      */
     requestFulfilled = (config: AxiosRequestConfig) => {
-        let authHeader;
-        const token = this.getTokenFromType(this.resourceType);
+        let authHeader
+        const token = this.getTokenFromType(this.resourceType)
 
         if (token) {
-            authHeader = `Bearer ${token}`;
+            authHeader = `Bearer ${token}`
         }
 
-        if (!config.headers) {
-            config.headers = {};
+        if (config.headers == null) {
+            config.headers = {}
         }
 
-        const contentType = config.headers['Content-Type'];
+        const contentType = config.headers['Content-Type']
         if (contentType === 'application/x-www-form-urlencoded') {
-            config.data = qs.stringify(config.data);
+            config.data = qs.stringify(config.data)
         }
 
         if (authHeader) {
-            config.headers.Authorization = authHeader;
+            config.headers.Authorization = authHeader
         }
         if (this.resourceType) {
             // Add default token of axios for unit test
             // config.headers.Authorization = axios.defaults.headers['Authorization'];
         }
-        return config;
+        return config
     };
 
-    requestReject = (error: any) => {
-        return Promise.reject(error);
+    requestReject = async (error: any) => {
+        return await Promise.reject(error)
     };
 
-    responseFulfilled = (response: AxiosResponse) => response;
+    responseFulfilled = (response: AxiosResponse) => response
 
-    responseReject = (error: AxiosError) => Promise.reject(error);
+    responseReject = async (error: AxiosError) => await Promise.reject(error)
 }
