@@ -1,36 +1,36 @@
-import { PixelRatio, Dimensions, Platform, StatusBar } from "react-native";
+import { PixelRatio, Dimensions, Platform, StatusBar } from 'react-native'
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
-const screenHeight = Dimensions.get('screen').height;
-const navbarHeight = screenHeight - height + (StatusBar.currentHeight ?? 0);
+const width = Dimensions.get('window').width
+const height = Dimensions.get('window').height
+const screenHeight = Dimensions.get('screen').height
+const navbarHeight = screenHeight - height + (StatusBar.currentHeight ?? 0)
 
-const scale = width / 375;
+const scale = width / 375
 
 const responsiveSize = (size: number) => {
-    const newSize = size * scale;
-    return Math.round(PixelRatio.roundToNearestPixel(newSize));
-};
+    const newSize = size * scale
+    return Math.round(PixelRatio.roundToNearestPixel(newSize))
+}
 
 const isIphoneX = () => {
-    const dimen = Dimensions.get('window');
+    const dimen = Dimensions.get('window')
     return (
         Platform.OS === 'ios' &&
         !Platform.isPad &&
         !Platform.isTV &&
-        ((dimen.height === 780 || dimen.width === 780)
-            || (dimen.height === 812 || dimen.width === 812)
-            || (dimen.height === 844 || dimen.width === 844)
-            || (dimen.height === 896 || dimen.width === 896)
-            || (dimen.height === 926 || dimen.width === 926))
+        ((dimen.height === 780 || dimen.width === 780) ||
+            (dimen.height === 812 || dimen.width === 812) ||
+            (dimen.height === 844 || dimen.width === 844) ||
+            (dimen.height === 896 || dimen.width === 896) ||
+            (dimen.height === 926 || dimen.width === 926))
     );
-};
+}
 
 const statusBarHeight = Platform.select({
     ios: isIphoneX() ? 44 : 20,
     android: StatusBar.currentHeight,
     default: 0
-});
+})
 
 const dimensions = {
     androidBottomNavHeight: Platform.OS === 'android' ? navbarHeight : 0,
@@ -52,8 +52,8 @@ const dimensions = {
     p40: responsiveSize(40),
     p48: responsiveSize(48),
     p56: responsiveSize(56),
-    p62: responsiveSize(62),
-};
+    p62: responsiveSize(62)
+}
 
 const fontSize = {
     makeResponsiveSize: responsiveSize,
@@ -68,7 +68,7 @@ const fontSize = {
     p24: responsiveSize(24),
     p28: responsiveSize(28),
     p32: responsiveSize(32),
-    p40: responsiveSize(40),
-};
+    p40: responsiveSize(40)
+}
 
-export default { dimensions, fontSize };
+export default { dimensions, fontSize }

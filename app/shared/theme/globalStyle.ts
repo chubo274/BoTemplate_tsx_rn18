@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
 
 export const globalShadowStyle = StyleSheet.create({
     shadow: {
@@ -9,6 +9,6 @@ export const globalShadowStyle = StyleSheet.create({
         },
         shadowOpacity: 0.1,
         shadowRadius: 2,
-        elevation: 2,
+        elevation: 2
     }
-});
+})

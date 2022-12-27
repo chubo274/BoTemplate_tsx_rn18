@@ -1,8 +1,8 @@
-import { backToTopAuthStack } from 'app/modules/navigation';
-import { AppButton } from 'components/button/AppButton';
-import { AppText } from 'components/text/AppText';
-import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import { backToTopAuthStack } from 'app/modules/navigation'
+import { AppButton } from 'components/button/AppButton'
+import { AppText } from 'components/text/AppText'
+import React, { useCallback } from 'react'
+import { View } from 'react-native'
 
 interface IProps {
 
@@ -10,8 +10,8 @@ interface IProps {
 
 const ProfileScreen = React.memo((props: IProps) => {
     const onLogout = useCallback(() => {
-        backToTopAuthStack();
-    }, [backToTopAuthStack]);
+        backToTopAuthStack()
+    }, [])
 
     return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <AppText>Profile Screen</AppText>
@@ -20,6 +20,6 @@ const ProfileScreen = React.memo((props: IProps) => {
             onPress={onLogout}
         />
     </View>
-});
+})
 
-export default ProfileScreen;
+export default ProfileScreen

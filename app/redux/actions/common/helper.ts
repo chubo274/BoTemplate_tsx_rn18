@@ -1,39 +1,38 @@
-import { ACTION_LIST, ACTION_PREFIX, ACTION_SECTION, FAILED_ACTION, LOADMORE_ACTION, REFRESH_ACTION, SUCCESS_ACTION } from "./actionTypes";
+import { ACTION_LIST, ACTION_PREFIX, ACTION_SECTION, FAILED_ACTION, LOADMORE_ACTION, REFRESH_ACTION, SUCCESS_ACTION } from './actionTypes'
 
 interface IActionType {
-    start: string;
-    failed: string;
+  start: string
+  failed: string
 }
 const createActionTypes = (actionType: string): IActionType => {
     return {
         start: `${actionType}_${ACTION_PREFIX}`,
         failed: `${actionType}_${FAILED_ACTION}`
     };
-};
-
+}
 
 interface IActionNormalType extends IActionType {
-    success: string;
+  success: string
 }
 
 interface IActionListType extends IActionType {
-    listSuccess: string;
-    listRefresh: string;
-    listLoadMore: string;
+  listSuccess: string
+  listRefresh: string
+  listLoadMore: string
 }
 
 interface IActionSectionListType extends IActionType {
-    sectionSuccess: string;
-    sectionRefresh: string;
-    sectionLoadMore: string;
+  sectionSuccess: string
+  sectionRefresh: string
+  sectionLoadMore: string
 }
 
 export const createActionNormalTypes = (actionType: string): IActionNormalType => {
     return {
         ...createActionTypes(actionType),
-        success: `${actionType}_${SUCCESS_ACTION}`,
+        success: `${actionType}_${SUCCESS_ACTION}`
     };
-};
+}
 
 export const createActionListTypes = (actionType: string): IActionListType => {
     return {
@@ -42,7 +41,7 @@ export const createActionListTypes = (actionType: string): IActionListType => {
         listRefresh: `${ACTION_LIST}_${actionType}_${REFRESH_ACTION}`,
         listLoadMore: `${ACTION_LIST}_${actionType}_${LOADMORE_ACTION}`
     };
-};
+}
 
 export const createActionSectionTypes = (actionType: string): IActionSectionListType => {
     return {
@@ -51,4 +50,4 @@ export const createActionSectionTypes = (actionType: string): IActionSectionList
         sectionRefresh: `${ACTION_SECTION}_${actionType}_${REFRESH_ACTION}`,
         sectionLoadMore: `${ACTION_SECTION}_${actionType}_${LOADMORE_ACTION}`
     };
-};
+}
