@@ -6,6 +6,7 @@ import { postLoginRequest } from 'app/redux/actions/user'
 import { AppButton } from 'components/button/AppButton'
 import { AppText } from 'components/text/AppText'
 import React, { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { useDispatch } from 'react-redux'
 
@@ -15,6 +16,7 @@ interface IProps {
 
 const LoginScreen = React.memo((props: IProps) => {
     const navigation = useNavigation<StackNavigationProp<AuthStackParamList, 'LoginScreen'>>()
+    const { t } = useTranslation();
     const dispatch = useDispatch()
 
     const onLogin = useCallback(() => {
@@ -27,9 +29,9 @@ const LoginScreen = React.memo((props: IProps) => {
     }, [navigation])
 
     return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <AppText>Login Screen</AppText>
+        <AppText>{t('login')}</AppText>
         <AppButton
-            text={'Login'}
+            text={t('login')}
             onPress={onLogin}
         />
         <AppButton

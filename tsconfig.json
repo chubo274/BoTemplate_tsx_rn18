@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react",
-    "lib": ["es2015", "es2015.promise", "es2016.array.include", "dom"],
+    "lib": ["ES2021", "ES2021.Promise", "es2019.array", "dom"],
     "strict": true,
     "moduleResolution": "node",
     "baseUrl": "./",
