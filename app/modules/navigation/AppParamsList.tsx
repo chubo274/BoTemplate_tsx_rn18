@@ -1,5 +1,5 @@
 // stack in tab bar
-export interface AppTabParamList {
+export type AppTabParamList = {
     HomeTab: undefined
     ProfileTab: undefined
 }

@@ -54,7 +54,7 @@ export const CustomTabBar = (props: BottomTabBarProps) => {
                         style={styles.item}
                     >
                         <TabBarIcon
-                            imgStyle={{ tintColor: isFocused ? theme.color.navigationTintColor : '#BBBBBB' }}
+                            imgStyle={{ tintColor: isFocused ? theme.color.navigationTintColor : theme.color.navigationTintColorInactive }}
                             source={source}
                             name={routeName}
                         />
