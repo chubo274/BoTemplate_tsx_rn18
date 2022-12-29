@@ -22,7 +22,7 @@ export const userDataRepo = () => {
         const apiGateway = new ApiGateway({
             method: 'POST',
             resource,
-            body: { ...body, grantType: 'password' }
+            body
         })
 
         return await apiGateway.execute().then(async response => {
