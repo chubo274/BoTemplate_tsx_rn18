@@ -5,7 +5,7 @@ import theme from 'shared/theme';
 
 interface IAppInput extends TextInputProps {
     value: string;
-    placeholder?: string;
+    pointerEvents?: 'none' | 'box-none' | 'box-only' | 'auto' | undefined;
     disabled?: boolean;
     label?: string | ReactElement;
     error?: boolean | string;
@@ -14,31 +14,16 @@ interface IAppInput extends TextInputProps {
     inputStyle?: StyleProp<ViewStyle>;
     validateStyle?: StyleProp<ViewStyle>;
     labelStyle?: StyleProp<TextStyle>;
-    placeholderColor?: string;
     leftIcon?: ImageSourcePropType;
     rightIcon?: ImageSourcePropType;
 }
 
 export const AppInput = (props: IAppInput) => {
-    const {
-        value,
-        label,
-        placeholder,
-        containerStyle,
-        inputStyle,
-        inputContainerStyle,
-        labelStyle,
-        placeholderColor,
-        validateStyle,
-        error,
-        leftIcon,
-        rightIcon,
-        disabled = false,
-    } = props;
+    const { value, label, containerStyle, inputStyle, inputContainerStyle, labelStyle, validateStyle, error, leftIcon, rightIcon, disabled = false, pointerEvents } = props;
 
     const renderLeftContent = () => {
         if (!leftIcon) return;
-        return <Image style={styles.leftIcon} source={leftIcon} /> 
+        return <Image style={styles.leftIcon} source={leftIcon} />
     };
     const renderRightContent = () => {
         if (!rightIcon) return;
@@ -60,12 +45,11 @@ export const AppInput = (props: IAppInput) => {
                 ]}
             >
                 {renderLeftContent()}
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1 }} pointerEvents={pointerEvents}>
                     <TextInput
                         {...props}
                         autoCapitalize="none"
-                        value={value}
-                        editable={!disabled}
+                        value={value?.toString()}
                         style={[
                             {
                                 fontSize: theme.fontSize.p16,
@@ -73,8 +57,7 @@ export const AppInput = (props: IAppInput) => {
                             inputStyle,
                             disabled ? { color: theme.color.gray88 } : null,
                         ]}
-                        placeholder={placeholder}
-                        placeholderTextColor={placeholderColor || theme.color.grey11}
+                        placeholderTextColor={props.placeholderTextColor || theme.color.grey11}
                     />
                 </View>
                 {renderRightContent()}
@@ -88,7 +71,10 @@ export const AppInput = (props: IAppInput) => {
 
 const styles = StyleSheet.create({
     defaultContainer: {
-        width:'100%',
+        width: '100%',
+        paddingHorizontal: theme.dimensions.p12,
+        paddingVertical: theme.dimensions.p12,
+        borderWidth: 1,
     },
     defaultValidate: {
 
@@ -102,15 +88,15 @@ const styles = StyleSheet.create({
     leftIcon: {
         width: theme.dimensions.makeResponsiveSize(16),
         height: theme.dimensions.makeResponsiveSize(16),
-        justifyContent:'center',
-        alignItems:'center',
+        justifyContent: 'center',
+        alignItems: 'center',
         marginRight: theme.dimensions.makeResponsiveSize(6),
     },
     rightIcon: {
         width: theme.dimensions.makeResponsiveSize(16),
         height: theme.dimensions.makeResponsiveSize(16),
-        justifyContent:'center',
-        alignItems:'center',
+        justifyContent: 'center',
+        alignItems: 'center',
         marginLeft: theme.dimensions.makeResponsiveSize(6),
     },
 });
