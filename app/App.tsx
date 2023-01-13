@@ -1,6 +1,7 @@
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import React from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { Host } from 'react-native-portalize'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import NavigationService from 'shared/helpers/NavigationService'
@@ -13,8 +14,10 @@ const App = () => {
             <PersistGate loading={null} persistor={persistor}>
                 <GestureHandlerRootView style={{ flex: 1 }}>
                     <NavigationContainer ref={(ref: NavigationContainerRef<any>) => NavigationService.setTopLevelNavigator(ref)}>
-                        <RootStack />
-                        {/* <InAppNotification /> */}
+                        <Host>
+                            <RootStack />
+                            {/* <InAppNotification /> */}
+                        </Host>
                     </NavigationContainer>
                 </GestureHandlerRootView>
             </PersistGate>
