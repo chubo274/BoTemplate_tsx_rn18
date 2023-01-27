@@ -72,3 +72,31 @@ export const processCanLoadMore = (currentData?: any[], pageSize?: number) => {
     }
     return false
 }
+
+// parse phone number input
+export const parsePhoneNumber = (v: string) => {
+    const value = v.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+    const spilitString = ' ';
+    const firstPart = 2;
+    const numberPart = 3;
+    const parts = [];
+
+    if (value.length <= firstPart) {
+        return value;
+    }
+
+    if (value.length > firstPart) {
+        parts.push(value.substring(0, firstPart));
+        for (let i = firstPart, length = value.length; i < length; i += numberPart) {
+            if (parts.length) {
+                parts.push(value.substring(i, i + numberPart));
+            }
+        }
+    }
+
+    if (parts.length) {
+        return parts.join(spilitString);
+    } else {
+        return value;
+    }
+}

@@ -9,7 +9,7 @@
         "test": "jest",
         "lint": "yarn lint:ts && yarn lint:style",
         "lint:ts": "tsc --noEmit",
-        "lint:style": "eslint 'app/**/*.{js,ts,jsx,tsx}'",
+        "lint:style": "eslint \"app/**/*.{js,ts,jsx,tsx}\"",
         "lint:fix": "eslint --fix .",
         "prepare": "husky install"
     },

@@ -15,6 +15,7 @@ export const DropPicker = React.memo((props: IProps) => {
 
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [heightViewDropDown, setHeightViewDropDown] = useState(0);
+    const [heightViewCurrentItem, setHeightViewCurrentItem] = useState(0);
 
     const dataListRenderDropDown = useMemo(() => {
         if (currentValue) {
@@ -23,10 +24,17 @@ export const DropPicker = React.memo((props: IProps) => {
         return listValueSelect;
     }, [listValueSelect, currentValue]);
 
+    const getHeighttCurrentItem = useCallback((event: LayoutChangeEvent) => {
+        const layoutHeight = event.nativeEvent.layout.height;
+        if (layoutHeight > 0 && heightViewCurrentItem !== layoutHeight) {
+            setHeightViewCurrentItem(layoutHeight);
+        }
+    }, [setHeightViewCurrentItem, heightViewCurrentItem]);
+
     const changeHeightViewDropDown = useCallback((event: LayoutChangeEvent) => {
         const layoutHeight = event.nativeEvent.layout.height;
         if (layoutHeight > 0 && heightViewDropDown !== layoutHeight) {
-            setHeightViewDropDown(layoutHeight * 4);
+            setHeightViewDropDown(layoutHeight * 4 + 2);
         }
     }, [setHeightViewDropDown, heightViewDropDown]);
 
@@ -54,11 +62,11 @@ export const DropPicker = React.memo((props: IProps) => {
     }
 
     return <View style={styles.container}>
-        <TouchableOpacity activeOpacity={0.8} onPress={onPressCurrentValueItem}>
+        <TouchableOpacity activeOpacity={0.8} onPress={onPressCurrentValueItem} onLayout={getHeighttCurrentItem}>
             {renderItemCurrentValue(currentValue)}
         </TouchableOpacity>
 
-        <View style={styles.viewCollap}>
+        <View style={[styles.viewCollap, {top: heightViewCurrentItem}]}>
             <Collapsible collapsed={isCollapsed}>
                 {renderCollapsible()}
             </Collapsible>
@@ -72,7 +80,6 @@ const styles = StyleSheet.create({
     },
     viewCollap: {
         position: 'absolute',
-        top: 45,
         left: 0,
         right: 0,
     },

@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import { createDefaultStackNavigationOptions } from '../configHeader'
+import { CreateHeaderDefault } from '../configHeader'
 import { AppStackParamList } from '../AppParamsList'
 import AppTab from './AppTab'
 
@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const AppStack = (props: IProps) => {
-    const defaultOptions = createDefaultStackNavigationOptions()
+    const defaultOptions = CreateHeaderDefault()
 
     return <Stack.Navigator screenOptions={defaultOptions} initialRouteName={'AppTab'}>
         <Stack.Screen name='AppTab' component={AppTab} options={{ headerShown: false }} />

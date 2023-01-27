@@ -54,7 +54,7 @@ export const CustomTabBar = (props: BottomTabBarProps) => {
                         style={styles.item}
                     >
                         <TabBarIcon
-                            imgStyle={{ tintColor: isFocused ? theme.color.navigationTintColor : theme.color.navigationTintColorInactive }}
+                            imgStyle={{ tintColor: isFocused ? theme.color.navigation.tabbarActiveColor : theme.color.navigation.tabbarInactiveColor }}
                             source={source}
                             name={routeName}
                         />
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         height: theme.dimensions.makeResponsiveSize(80),
-        backgroundColor: theme.color.tabbarBackgroundColor,
+        backgroundColor: theme.color.navigation.navigationBackgroundColor,
         paddingBottom: theme.dimensions.makeResponsiveSize(20)
     },
     item: {

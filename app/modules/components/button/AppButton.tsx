@@ -16,14 +16,14 @@ interface IAppButton {
 export const AppButton = React.memo((props: IAppButton) => {
     const { text, style, textStyle, disabled, leftIcon, rightIcon, onPress } = props
     return <TouchableOpacity activeOpacity={0.6}
-        style={[styles.defaultTouch, style, disabled && { backgroundColor: theme.color.grey3 }]}
+        style={[styles.defaultTouch, style, disabled && { backgroundColor: theme.color.grey2 }]}
         onPress={onPress}
         disabled={disabled}
     >
         {leftIcon}
-        <View style={{ height: 4, width: 4 }} />
-        <AppText style={[styles.defaultText, textStyle, disabled && { color: theme.color.grey2 }]}>{text}</AppText>
-        <View style={{ height: 4, width: 4 }} />
+        <View style={{ margin: 4 }} >
+            <AppText style={[styles.defaultText, textStyle, disabled && { color: theme.color.grey2 }]}>{text}</AppText>
+        </View>
         {rightIcon}
     </TouchableOpacity>
 })

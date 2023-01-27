@@ -1,6 +1,6 @@
 import { AppText } from 'components/text/AppText';
-import React, { ReactElement } from 'react';
-import { Image, ImageSourcePropType, StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle, View, ViewStyle } from 'react-native';
+import React, { ReactElement, useRef } from 'react';
+import { Image, ImageSourcePropType, StyleProp, StyleSheet, Text, TextInput, TextInputProps, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import theme from 'shared/theme';
 
 interface IAppInput extends TextInputProps {
@@ -14,20 +14,43 @@ interface IAppInput extends TextInputProps {
     inputStyle?: StyleProp<ViewStyle>;
     validateStyle?: StyleProp<ViewStyle>;
     labelStyle?: StyleProp<TextStyle>;
-    leftIcon?: ImageSourcePropType;
-    rightIcon?: ImageSourcePropType;
+    leftIcon?: ImageSourcePropType | ReactElement;
+    rightIcon?: ImageSourcePropType | ReactElement;
+    onPressIconLeft?: () => void
+    onPressIconRight?: () => void
 }
 
 export const AppInput = (props: IAppInput) => {
-    const { value, label, containerStyle, inputStyle, inputContainerStyle, labelStyle, validateStyle, error, leftIcon, rightIcon, disabled = false, pointerEvents } = props;
+    const { value, label, containerStyle, inputStyle, inputContainerStyle, labelStyle, validateStyle, error,
+        leftIcon, rightIcon, disabled = false, pointerEvents, onPressIconLeft, onPressIconRight } = props;
+    const refInput = useRef<TextInput>(null)
 
     const renderLeftContent = () => {
         if (!leftIcon) return;
-        return <Image style={styles.leftIcon} source={leftIcon} />
+        if (typeof leftIcon === 'number') {
+            leftIcon as ImageSourcePropType;
+            return <TouchableOpacity onPress={onPressIconLeft} disabled={!onPressIconLeft} activeOpacity={0.8}>
+                <Image style={styles.leftIcon} source={leftIcon} />
+            </TouchableOpacity>
+        }
+        return <>{leftIcon}</>;
     };
+
     const renderRightContent = () => {
-        if (!rightIcon) return;
-        return <Image style={styles.rightIcon} source={rightIcon} />;
+        const onClickClearInput = () => {
+            refInput.current?.clear()
+        }
+        if (!rightIcon)
+            return <TouchableOpacity onPress={onClickClearInput} activeOpacity={0.8}>
+                <Text>x</Text>
+            </TouchableOpacity>
+        if (typeof rightIcon === 'number') {
+            rightIcon as ImageSourcePropType;
+            return <TouchableOpacity onPress={onPressIconRight} disabled={!onPressIconRight} activeOpacity={0.8}>
+                <Image style={styles.rightIcon} source={rightIcon} />
+            </TouchableOpacity>
+        }
+        return <>{rightIcon}</>;
     };
 
     return (
@@ -45,9 +68,10 @@ export const AppInput = (props: IAppInput) => {
                 ]}
             >
                 {renderLeftContent()}
-                <View style={{ flex: 1 }} pointerEvents={pointerEvents}>
+                <View style={{ flex: 1, justifyContent: 'center' }} pointerEvents={pointerEvents}>
                     <TextInput
                         {...props}
+                        ref={refInput}
                         autoCapitalize="none"
                         value={value?.toString()}
                         style={[
@@ -84,6 +108,7 @@ const styles = StyleSheet.create({
     inputWrapper: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center'
     },
     leftIcon: {
         width: theme.dimensions.makeResponsiveSize(16),
