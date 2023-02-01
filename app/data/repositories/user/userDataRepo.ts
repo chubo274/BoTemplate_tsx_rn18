@@ -1,6 +1,6 @@
 import ApiGateway from 'app/data/api'
 import { ResourceType } from 'app/data/api/interceptor/Interceptor'
-import { baseUrl, urls } from 'app/data/api/resource'
+import { urls } from 'app/data/api/resource'
 import { ResponseModel } from 'app/models/common'
 import { IPostLoginRequest } from 'app/models/user/IPostLoginRequest'
 import { UserModel } from 'app/models/user/UserModel'
@@ -19,7 +19,7 @@ export const userDataRepo = () => {
     const { setToken, removeToken } = localStoreTokenRepo()
 
     const login = async (body: IPostLoginRequest): Promise<ResponseModel<UserModel>> => {
-        const resource = `${baseUrl}${urls.login}`
+        const resource = urls.login
         const apiGateway = new ApiGateway({
             method: 'POST',
             resource,
