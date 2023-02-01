@@ -1,10 +1,10 @@
 import { ResponseModel } from 'app/models/common'
-import Interceptor from './Interceptor'
+import Interceptor, { ResourceType } from './Interceptor'
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 export default class DefaultInterceptor extends Interceptor {
-    constructor (resource: string) {
-        super(resource)
+    constructor(resource: string, resourceType: ResourceType) {
+        super(resource, resourceType)
     }
 
     /**

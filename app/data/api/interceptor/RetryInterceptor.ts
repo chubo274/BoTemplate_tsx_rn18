@@ -1,7 +1,6 @@
-import Config from 'app/configs/config'
 import { UserRepository } from 'app/data/repositories/user'
 import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import Interceptor from './Interceptor'
+import Interceptor, { ResourceType } from './Interceptor'
 
 type RefreshTokenCallback = (token: string, refreshToken?: string) => void
 
@@ -12,8 +11,8 @@ export class RetryInterceptor extends Interceptor {
     axiosInstance: AxiosInstance
     _userRepository: typeof UserRepository
 
-    constructor(axiosInstance: AxiosInstance, resource: string, resourceType?: any, setting?: Config) {
-        super(resource, resourceType, setting)
+    constructor(axiosInstance: AxiosInstance, resource: string, resourceType: ResourceType) {
+        super(resource, resourceType)
         this.axiosInstance = axiosInstance
         this._userRepository = UserRepository
     }

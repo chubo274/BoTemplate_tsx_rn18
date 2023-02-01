@@ -1,13 +1,15 @@
-import Config from 'app/configs/config'
 import { AxiosRequestConfig, AxiosResponse } from 'axios'
+
+export enum ResourceType {
+    Public = 'Public',
+    Auth = 'Auth',
+}
 
 export default abstract class Interceptor {
     resource: string
-    setting?: Config
-    resourceType?: any
+    resourceType: ResourceType
 
-    protected constructor(resource: string, resourceType?: any, setting?: Config) {
-        this.setting = setting
+    protected constructor(resource: string, resourceType: ResourceType) {
         this.resource = resource
         this.resourceType = resourceType
     }

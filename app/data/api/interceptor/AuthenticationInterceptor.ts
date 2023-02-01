@@ -1,23 +1,25 @@
-import Config from 'app/configs/config'
 import { UserRepository } from 'app/data/repositories/user'
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import qs from 'qs'
-import Interceptor from './Interceptor'
+import Interceptor, { ResourceType } from './Interceptor'
 
 export default class AuthenticationInterceptor extends Interceptor {
     _userRepository: typeof UserRepository
 
-    constructor (resource: string, resourceType?: any, setting?: Config) {
-        super(resource, resourceType, setting)
+    constructor(resource: string, resourceType: ResourceType) {
+        super(resource, resourceType)
 
         this._userRepository = UserRepository
     }
 
-    getTokenFromType = (type?: any): string => {
+    getTokenFromType = (type: ResourceType): string => {
         const userData = this._userRepository.getTokenUser()
         switch (type) {
-            default:
+            case ResourceType.Auth:
                 return userData?.token ?? ''
+            case ResourceType.Public:
+            default:
+                return ''
         }
     };
 
@@ -27,12 +29,7 @@ export default class AuthenticationInterceptor extends Interceptor {
      * @return {AxiosRequestConfig}
      */
     requestFulfilled = (config: AxiosRequestConfig) => {
-        let authHeader
         const token = this.getTokenFromType(this.resourceType)
-
-        if (token) {
-            authHeader = `Bearer ${token}`
-        }
 
         if (config.headers == null) {
             config.headers = {}
@@ -43,9 +40,10 @@ export default class AuthenticationInterceptor extends Interceptor {
             config.data = qs.stringify(config.data)
         }
 
-        if (authHeader) {
-            config.headers.Authorization = authHeader
+        if (!!token) {
+            config.headers.Authorization = token
         }
+
         if (this.resourceType) {
             // Add default token of axios for unit test
             // config.headers.Authorization = axios.defaults.headers['Authorization'];
