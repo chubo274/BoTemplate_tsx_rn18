@@ -7,6 +7,7 @@ import NavigationService from 'shared/helpers/NavigationService'
 import { configureLocalization, LANGUAGES } from 'shared/localization'
 import AppStack from './appStack'
 import AuthStack from './authStack'
+import AppSplashScreen from 'app/modules/screens/splashScreen'
 
 const Stack = createStackNavigator()
 
@@ -39,6 +40,7 @@ const RootStack = (props: IProps) => {
             animationTypeForReplace: 'pop'
         }}
     >
+        <Stack.Screen name={'AppSplash'} component={AppSplashScreen} />
         <Stack.Screen name={'App'} component={AppStack} />
         <Stack.Screen name={'Auth'} component={AuthStack} />
     </Stack.Navigator>

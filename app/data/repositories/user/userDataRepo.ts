@@ -1,4 +1,5 @@
 import ApiGateway from 'app/data/api'
+import { ResourceType } from 'app/data/api/interceptor/Interceptor'
 import { baseUrl, urls } from 'app/data/api/resource'
 import { ResponseModel } from 'app/models/common'
 import { IPostLoginRequest } from 'app/models/user/IPostLoginRequest'
@@ -18,10 +19,11 @@ export const userDataRepo = () => {
     const { setToken, removeToken } = localStoreTokenRepo()
 
     const login = async (body: IPostLoginRequest): Promise<ResponseModel<UserModel>> => {
-        const resource = `${baseUrl}${urls.loginEmail}`
+        const resource = `${baseUrl}${urls.login}`
         const apiGateway = new ApiGateway({
             method: 'POST',
             resource,
+            resourceType: ResourceType.Auth,
             body
         })
 
@@ -48,8 +50,8 @@ export const userDataRepo = () => {
     }
 
     const logout = async (): Promise<ResponseModel<boolean>> => {
-        SessionStorage.token = '',
-        SessionStorage.refreshToken = '',
+        SessionStorage.token = ''
+        SessionStorage.refreshToken = ''
         await removeToken()
         return ResponseModel.createSuccess(true)
     }

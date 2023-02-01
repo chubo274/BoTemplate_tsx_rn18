@@ -20,8 +20,7 @@ const LoginScreen = React.memo((props: IProps) => {
     const dispatch = useDispatch()
 
     const onLogin = useCallback(() => {
-        backToTopAppStack()
-        dispatch(postLoginRequest({ email: '', password: '' }))
+        dispatch(postLoginRequest({ email: '', password: '' }, { onSuccess: (data: any) => backToTopAppStack() }))
     }, [dispatch])
 
     const onForgotPassword = useCallback(() => {
