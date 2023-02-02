@@ -32,7 +32,7 @@ const RootStack = (props: IProps) => {
     }, [languageReducer.data]);
 
     return <Stack.Navigator
-        initialRouteName={'App'}
+        initialRouteName={'AppSplash'}
         screenOptions={{
             headerMode: 'screen',
             presentation: 'card',
