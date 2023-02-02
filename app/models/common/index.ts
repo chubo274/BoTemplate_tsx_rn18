@@ -67,8 +67,8 @@ export class ResponseModel<T> {
 
     static createSuccess (res: any): ResponseModel<any> {
         const response = new ResponseModel(200, '200', undefined)
-        response.status = res.number
-        response.statusText = res.string
+        response.status = res.status
+        response.statusText = res.statusText
         response.data = res.data
         response.isError = false
         response.request = res.request

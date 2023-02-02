@@ -18,7 +18,7 @@ export const getLocal = async (key: StoreKey): Promise<any> => {
 
 export const setLocal = async (key: StoreKey, data: any): Promise<boolean> => {
     try {
-        const jsonValue = JSON.stringify(data)
+        const jsonValue = JSON.stringify(data === undefined || data === null ? '' : data)
         await AsyncStorage.setItem(key, jsonValue)
         return true
     } catch (e) {
