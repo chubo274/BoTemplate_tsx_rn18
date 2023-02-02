@@ -6,24 +6,20 @@ import { useEffect , useCallback , useState } from 'react';
 export const useInitApp = () => {
     const { getToken } = localStoreTokenRepo()
 
-    const [isSettingUp, setIsSettingUp] = useState(false);
-
     const setTokenSession = useCallback(async () => {
-        setIsSettingUp(true)
         await getToken().then((value: ISessionStorage) => {
             userDataRepo().setTokenUser(value);
-            setIsSettingUp(false);
             if (value.token) {
                 backToTopAppStack()
             } else {
                 backToTopAuthStack()
             }
         })
-    }, [getToken, setIsSettingUp])
+    }, [getToken])
 
     useEffect(() => {
         setTokenSession()
     }, [setTokenSession])
 
-    return { isSettingUp }
+    return { }
 }
