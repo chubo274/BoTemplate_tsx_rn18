@@ -2,8 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StoreKey } from './constant'
 
 export interface IValueUpdate<T> {
-  key: keyof T
-  value: any
+    key: keyof T
+    value: any
 }
 /// AsyncStorage function
 export const getLocal = async (key: StoreKey): Promise<any> => {
@@ -73,30 +73,36 @@ export const processCanLoadMore = (currentData?: any[], pageSize?: number) => {
     return false
 }
 
-// parse phone number input
+// parse phone number input, other way with google-libphonenumber
 export const parsePhoneNumber = (v: string) => {
     const value = v.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
     const spilitString = ' ';
-    const firstPart = 2;
     const numberPart = 3;
+    const modLength = value.length % numberPart;
     const parts = [];
+    let step = numberPart;
 
-    if (value.length <= firstPart) {
-        return value;
-    }
-
-    if (value.length > firstPart) {
-        parts.push(value.substring(0, firstPart));
-        for (let i = firstPart, length = value.length; i < length; i += numberPart) {
-            if (parts.length) {
-                parts.push(value.substring(i, i + numberPart));
+    if (value.length > numberPart) {
+        for (let i = 0, length = value.length; i < length; i += step) {
+            if (i === 0 && modLength > 0) {
+                if (modLength === 1) {
+                    const endSub = i + numberPart + (modLength);
+                    step = endSub;
+                    parts.push(value.substring(i, endSub));
+                }
+                if (modLength === 2) {
+                    const endSub = i + (modLength);
+                    step = endSub;
+                    parts.push(value.substring(i, endSub));
+                }
+            } else {
+                const endSub = i + numberPart;
+                step = numberPart;
+                parts.push(value.substring(i, endSub));
             }
         }
-    }
-
-    if (parts.length) {
-        return parts.join(spilitString);
-    } else {
+        if (parts.length) return parts.join(spilitString);
         return value;
     }
+    return value;
 }

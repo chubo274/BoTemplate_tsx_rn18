@@ -1,25 +1,38 @@
 import { ISessionStorage, localStoreTokenRepo } from 'app/data/repositories/user/localStoreTokenRepo';
 import { userDataRepo } from 'app/data/repositories/user/userDataRepo';
 import { backToTopAppStack, backToTopAuthStack } from 'app/modules/navigation';
-import { useEffect , useCallback , useState } from 'react';
+import { useCallback, useEffect } from 'react';
 
 export const useInitApp = () => {
     const { getToken } = localStoreTokenRepo()
-
     const setTokenSession = useCallback(async () => {
-        await getToken().then((value: ISessionStorage) => {
+        return getToken().then((value: ISessionStorage) => {
             userDataRepo().setTokenUser(value);
-            if (value.token) {
-                backToTopAppStack()
-            } else {
-                backToTopAuthStack()
-            }
+            return value.token;
         })
-    }, [getToken])
+    }, [getToken]);
 
-    useEffect(() => {
-        setTokenSession()
+    const initStateApp = useCallback(async () => {
+        const token = await setTokenSession();
+        // const listApiInit = await Promise.all([getStudentOfParent(), getCommonApplicaton(), getNationalities()]);
+        // if (listApiInit.find((el: boolean) => el === false)) {
+        //     console.error('listApiInit got error');
+        // } else {
+        //     if (token) {
+        //         backToTopAppStack()
+        //     } else {
+        //         backToTopAuthStack()
+        //     }
+        if (token) {
+            backToTopAppStack()
+        } else {
+            backToTopAuthStack()
+        }
     }, [setTokenSession])
 
-    return { }
+    useEffect(() => {
+        initStateApp()
+    }, [initStateApp])
+
+    return {}
 }
