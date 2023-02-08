@@ -9,6 +9,7 @@ import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { useDispatch } from 'react-redux'
+import { useInitApp } from 'shared/hooks/initApp/useInitApp'
 
 interface IProps {
 
@@ -17,11 +18,19 @@ interface IProps {
 const LoginScreen = React.memo((props: IProps) => {
     const navigation = useNavigation<StackNavigationProp<AuthStackParamList, 'LoginScreen'>>()
     const { t } = useTranslation();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const { promiseInitAfterLogin } = useInitApp();
 
-    const onLogin = useCallback(() => {
-        dispatch(postLoginRequest({ email: '', password: '' }, { onSuccess: (data: any) => backToTopAppStack() }))
-    }, [dispatch])
+    const onLogin = useCallback(async () => {
+
+        const initAfterLogin = async (data?: any) => {
+            promiseInitAfterLogin().then((value: boolean) => {
+                if (value) backToTopAppStack()
+            })
+        }
+
+        dispatch(postLoginRequest({ email: '', password: '' }, { onSuccess: initAfterLogin }));
+    }, [dispatch, promiseInitAfterLogin]);
 
     const onForgotPassword = useCallback(() => {
         navigation.navigate('ForgotPasswordScreen')
