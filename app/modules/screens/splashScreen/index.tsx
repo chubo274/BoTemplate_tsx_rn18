@@ -1,12 +1,16 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useInitApp } from 'shared/hooks/initApp/useInitApp';
 
 const SplashScreen = () => {
+    const didMount = useRef<boolean>(false);
     const { initStateApp } = useInitApp()
 
     useLayoutEffect(() => {
-        initStateApp()
+        if (!didMount.current) {
+            didMount.current = true;
+            initStateApp()
+        }
     }, [initStateApp])
 
     return <View style={styles.container}>
