@@ -1,5 +1,6 @@
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import React from 'react'
+import { Platform, StatusBar } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Host } from 'react-native-portalize'
 import { Provider } from 'react-redux'
@@ -15,8 +16,9 @@ const App = () => {
                 <GestureHandlerRootView style={{ flex: 1 }}>
                     <NavigationContainer ref={(ref: NavigationContainerRef<any>) => NavigationService.setTopLevelNavigator(ref)}>
                         <Host>
+                            <StatusBar barStyle={Platform.select({ android: 'light-content', ios: 'dark-content' })} />
                             <RootStack />
-                            {/* <InAppNotification /> */}
+                            {/* <AppToast />*/}
                         </Host>
                     </NavigationContainer>
                 </GestureHandlerRootView>
