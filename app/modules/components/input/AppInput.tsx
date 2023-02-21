@@ -75,9 +75,7 @@ export const AppInput = (props: IAppInput) => {
                         autoCapitalize="none"
                         value={value?.toString()}
                         style={[
-                            {
-                                fontSize: theme.fontSize.p16,
-                            },
+                            styles.defaultInputStyle,
                             inputStyle,
                             disabled ? { color: theme.color.gray88 } : null,
                         ]}
@@ -104,6 +102,14 @@ const styles = StyleSheet.create({
 
     },
     labelInput: {
+    },
+    defaultInputStyle: {
+        // fontFamily: theme.font.Regular,
+        // color: theme.color.textColor.primary,
+        fontSize: theme.fontSize.p16,
+        paddingVertical: 0,
+        marginHorizontal: 0,
+        marginBottom: 0,
     },
     inputWrapper: {
         flexDirection: 'row',
