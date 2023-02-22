@@ -32,22 +32,20 @@ export default class DefaultInterceptor extends Interceptor {
         try {
             if (error.response != null) {
                 status = error.response.status
-                console.info('DefaultInterceptorReject', error.response.status)
-                console.info('DefaultInterceptorReject', error.response.data)
-                console.info('DefaultInterceptorReject', error.response.config)
+                console.info('DefaultInterceptorReject', error.response.status, error)
 
                 const data = error.response.data?.error
                 const errors: any[] | undefined = error.response.data?.errors
                 if ((errors != null) && errors.length > 0) {
                     message = errors[0].message
-                    rawError = errors[0]
+                    rawError = errors
                 } else {
                     const { statusCode, message: _message, code: _code } = data || {}
                     // server was received message, but response smt
                     status = !(status >= 200 && status < 300) ? status : statusCode
                     statusText = _code
                     message = _message || error?.response?.data?.errorMessage
-                    rawError = data
+                    rawError = data ?? errors
                 }
             } else {
                 console.warn('smt went wrong: ', error)
