@@ -9,11 +9,11 @@ function* postLoginEmail(action: IAction<IPostLoginRequest>) {
     const { payload, callBacks } = action
     try {
         const response: ResponseModel<UserModel> = yield UserRepository.login(payload!)
-        yield put(postLoginSuccess(response.data, { request: payload }))
-        callBacks && ((callBacks?.onSuccess) != null) && callBacks?.onSuccess()
-    } catch (error) {
+        yield put(postLoginSuccess(response?.data, { request: payload }))
+        callBacks?.onSuccess?.(response?.data)
+    } catch (error: any) {
         yield put(postLoginFailed(error))
-        callBacks && ((callBacks?.onFailed) != null) && callBacks?.onFailed()
+        callBacks?.onFailed?.(error?.message)
     }
 }
 
@@ -22,10 +22,10 @@ function* logOut(action: IAction<any>) {
     try {
         yield UserRepository.logout()
         yield put(logoutUserSuccess())
-        callBacks && ((callBacks?.onSuccess) != null) && callBacks?.onSuccess()
-    } catch (error) {
+        callBacks?.onSuccess?.()
+    } catch (error: any) {
         yield put(logoutUserFailed(error))
-        callBacks && ((callBacks?.onFailed) != null) && callBacks?.onFailed()
+        callBacks?.onFailed?.(error?.message)
     }
 }
 
