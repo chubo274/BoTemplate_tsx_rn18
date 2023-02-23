@@ -15,6 +15,7 @@ interface IConstructor {
     isFormDataType?: boolean
     body?: any
     params?: any
+    queryParams?: any
     onSendProgress?: (progress: number, total: number) => void
     onReceivedProgress?: (progress: number, total: number) => void
 }
@@ -25,6 +26,7 @@ class ApiGateway {
     resourceType: ResourceType
     body?: any
     params?: any
+    queryParams?: any
     _instanceAxios = axios.create()
     configTimeout = 30 * 1000
     requestConfig!: AxiosRequestConfig
@@ -33,7 +35,7 @@ class ApiGateway {
     onReceivedProgress?: (progress: number, total: number) => void
 
     constructor(data: IConstructor) {
-        const { resource, resourceType, method, body, params,
+        const { resource, resourceType, method, body, params, queryParams,
             onReceivedProgress, onSendProgress, isFormDataType } = data
         this.resourceType = resourceType
         this.resource = resource
@@ -43,6 +45,8 @@ class ApiGateway {
         this.onSendProgress = onSendProgress
         this.onReceivedProgress = onReceivedProgress
         this.isFormDataType = isFormDataType
+        const queryString = qs.stringify(queryParams, { skipNulls: true })
+        this.queryParams = queryString ? `?${queryString}` : ''
 
         this._config()
     }
@@ -55,7 +59,7 @@ class ApiGateway {
                 'Accept': 'application/json',
                 'Content-Type': this.isFormDataType ? 'application/x-www-form-urlencoded' : 'application/json', // Content-Type = 'application/json' == null
             },
-            url: this.resource,
+            url: this.resource + this.queryParams,
             method: this.method,
             params: this.params,
             paramsSerializer: {
