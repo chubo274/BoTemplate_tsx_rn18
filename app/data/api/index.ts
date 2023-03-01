@@ -57,7 +57,7 @@ class ApiGateway {
             timeout: this.configTimeout,
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': this.isFormDataType ? 'application/x-www-form-urlencoded' : 'application/json', // Content-Type = 'application/json' == null
+                'Content-Type': this.isFormDataType ? 'multipart/form-data' : 'application/json', // Content-Type = 'application/json' == null
             },
             url: this.resource + this.queryParams,
             method: this.method,
