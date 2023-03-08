@@ -1,6 +1,6 @@
 import { AppText } from 'components/text/AppText';
-import React, { ReactElement, useRef } from 'react';
-import { Image, ImageSourcePropType, StyleProp, StyleSheet, Text, TextInput, TextInputProps, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
+import React, { ReactElement } from 'react';
+import { Image, ImageSourcePropType, StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import theme from 'shared/theme';
 
 interface IAppInput extends TextInputProps {
@@ -20,10 +20,10 @@ interface IAppInput extends TextInputProps {
     onPressIconRight?: () => void
 }
 
-export const AppInput = (props: IAppInput) => {
+export const AppInput = React.memo(React.forwardRef((props: IAppInput, ref: React.ForwardedRef<TextInput | null>) => {
     const { value, label, containerStyle, inputStyle, inputContainerStyle, labelStyle, validateStyle, error,
         leftIcon, rightIcon, disabled = false, pointerEvents, onPressIconLeft, onPressIconRight } = props;
-    const refInput = useRef<TextInput>(null)
+    // const refInput = useRef<TextInput>(null)
 
     const renderLeftContent = () => {
         if (!leftIcon) return;
@@ -37,13 +37,14 @@ export const AppInput = (props: IAppInput) => {
     };
 
     const renderRightContent = () => {
-        const onClickClearInput = () => {
-            refInput.current?.clear()
-        }
-        if (!rightIcon)
-            return <TouchableOpacity onPress={onClickClearInput} activeOpacity={0.8}>
-                <Text>x</Text>
-            </TouchableOpacity>
+        // const onClickClearInput = () => {
+        //     refInput.current?.clear()
+        // }
+        // if (!rightIcon)
+        //     return <TouchableOpacity onPress={onClickClearInput} activeOpacity={0.8}>
+        //         <Text>x</Text>
+        //     </TouchableOpacity>
+        if (!rightIcon) return null
         if (typeof rightIcon === 'number') {
             rightIcon as ImageSourcePropType;
             return <TouchableOpacity onPress={onPressIconRight} disabled={!onPressIconRight} activeOpacity={0.8}>
@@ -71,7 +72,7 @@ export const AppInput = (props: IAppInput) => {
                 <View style={{ flex: 1, justifyContent: 'center' }} pointerEvents={pointerEvents}>
                     <TextInput
                         {...props}
-                        ref={refInput}
+                        ref={ref}
                         autoCapitalize="none"
                         value={value?.toString()}
                         style={[
@@ -89,7 +90,7 @@ export const AppInput = (props: IAppInput) => {
             )}
         </View>
     )
-}
+}))
 
 const styles = StyleSheet.create({
     defaultContainer: {
