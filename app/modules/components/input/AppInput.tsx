@@ -1,5 +1,5 @@
 import { AppText } from 'components/text/AppText';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 import { Image, ImageSourcePropType, StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import theme from 'shared/theme';
 
@@ -54,6 +54,15 @@ export const AppInput = React.memo(React.forwardRef((props: IAppInput, ref: Reac
         return <>{rightIcon}</>;
     };
 
+    const _inputStyle = useMemo(() => {
+        let style: StyleProp<TextStyle> = styles.defaultInputStyle;
+        if (inputStyle) style = [style, inputStyle]
+        if (disabled) style = [style, { color: theme.color.gray88 }]
+        // @ts-ignore
+        if (style.fontSize) style = [style, { lineHeight: style.fontSize + (style.fontSize / theme.fontSize.p11) }]
+        return style
+    }, [inputStyle, disabled])
+
     return (
         <View style={[styles.defaultContainer, containerStyle]}>
             {label ? (
@@ -75,11 +84,7 @@ export const AppInput = React.memo(React.forwardRef((props: IAppInput, ref: Reac
                         ref={ref}
                         autoCapitalize="none"
                         value={value?.toString()}
-                        style={[
-                            styles.defaultInputStyle,
-                            inputStyle,
-                            disabled ? { color: theme.color.gray88 } : null,
-                        ]}
+                        style={_inputStyle}
                         placeholderTextColor={props.placeholderTextColor || theme.color.grey11}
                     />
                 </View>

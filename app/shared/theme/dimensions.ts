@@ -61,6 +61,7 @@ const fontSize = {
     p4: responsiveSize(4),
     p6: responsiveSize(6),
     p8: responsiveSize(8),
+    p11: responsiveSize(11),
     p12: responsiveSize(12),
     p16: responsiveSize(16),
     p18: responsiveSize(18),
