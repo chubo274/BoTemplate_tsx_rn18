@@ -9,7 +9,9 @@ export interface IValueUpdate<T> {
 export const getLocal = async (key: StoreKey): Promise<any> => {
     try {
         const jsonValue = await AsyncStorage.getItem(key)
-        return jsonValue != null ? JSON.parse(jsonValue) : undefined
+        if (!jsonValue || jsonValue == null || JSON.parse(jsonValue) == 'undefined' || !JSON.parse(jsonValue))
+            return undefined
+        return JSON.parse(jsonValue)
     } catch (e) {
         console.info('localStoreRepo getUser Error', e)
         return undefined
