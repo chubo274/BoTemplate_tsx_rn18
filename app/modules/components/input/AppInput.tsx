@@ -11,7 +11,7 @@ interface IAppInput extends TextInputProps {
     error?: boolean | string;
     containerStyle?: StyleProp<ViewStyle>;
     inputContainerStyle?: StyleProp<ViewStyle>;
-    inputStyle?: StyleProp<ViewStyle>;
+    inputStyle?: StyleProp<TextStyle>;
     validateStyle?: StyleProp<ViewStyle>;
     labelStyle?: StyleProp<TextStyle>;
     leftIcon?: ImageSourcePropType | ReactElement;
