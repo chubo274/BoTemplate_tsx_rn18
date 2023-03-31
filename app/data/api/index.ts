@@ -81,6 +81,16 @@ class ApiGateway {
     };
 
     private readonly _addDefaultInterceptors = () => {
+        const defaultInterceptor = new DefaultInterceptor(this.resource, this.resourceType)
+        this._instanceAxios.interceptors.request.use(
+            defaultInterceptor.requestFulfilled,
+            defaultInterceptor.requestReject
+        );
+        this._instanceAxios.interceptors.response.use(
+            defaultInterceptor.responseFulfilled,
+            defaultInterceptor.responseReject
+        );
+
         const authenticationInterceptor = new AuthenticationInterceptor(this.resource, this.resourceType)
         this._instanceAxios.interceptors.request.use(authenticationInterceptor.requestFulfilled)
 
@@ -93,15 +103,6 @@ class ApiGateway {
 
     private readonly _addInterceptors = () => {
         // some expand interceptors default can be add here!
-        const defaultInterceptor = new DefaultInterceptor(this.resource, this.resourceType)
-        this._instanceAxios.interceptors.request.use(
-            defaultInterceptor.requestFulfilled,
-            defaultInterceptor.requestReject
-        );
-        this._instanceAxios.interceptors.response.use(
-            defaultInterceptor.responseFulfilled,
-            defaultInterceptor.responseReject
-        );
     }
 
     execute = async (): Promise<any> => await this._instanceAxios.request(this.requestConfig)
