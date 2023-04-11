@@ -1,6 +1,6 @@
 // common action prefix, surfix
-export const ACTION_LIST = 'LIST'
-export const ACTION_SECTION = 'SECTION'
+export const ACTION_LIST = 'ACTIONLIST'
+export const ACTION_SECTION = 'ACTIONSECTION'
 
 export const ACTION_PREFIX = 'START'
 export const FAILED_ACTION = 'FAILED'
