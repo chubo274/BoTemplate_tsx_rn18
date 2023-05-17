@@ -226,7 +226,7 @@ implements IBaseReducer<State, Action> {
                 ...state.params,
                 canLoadMore: {
                     // @ts-ignore
-                    ...state.params.canLoadMore,
+                    ...state?.params?.canLoadMore,
                     [sectionId!]: canLoadMore
                 }
             }
