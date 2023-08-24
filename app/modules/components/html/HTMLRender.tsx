@@ -7,6 +7,7 @@ import Image from 'react-native-image-lazy-loading';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import {useTranslation} from 'react-i18next';
 import theme from 'shared/theme';
+import table from '@native-html/table-plugin';
 
 interface IProps extends RenderHTMLProps {
     htmlContent?: string;
@@ -100,6 +101,7 @@ const HTMLRenderer = (props: Props) => {
                     javaScriptEnabled
                 />;
             },
+            table: table
         };
     }, [progressSizeImg, t])
 
@@ -122,20 +124,35 @@ const HTMLRenderer = (props: Props) => {
                 renderersProps={{
                     a: {
                         onPress: _onLinkPress
+                    },
+                    table: {
+                        animationType: 'animated',
+                        tableStyleSpecs: {
+                            outerBorderWidthPx: 1,
+                            rowsBorderWidthPx: 1,
+                            columnsBorderWidthPx: 1,
+                            fontSizePx: theme.fontSize.p13,
+                        }
                     }
                 }}
+                WebView={WebView}
+                // computeEmbeddedMaxWidth={(contentWidth, tagName) => {
+                //     if (tagName === 'table') {
+                //         return Math.min(contentWidth, 500);
+                //     }
+                //     return contentWidth;
+                // }}
                 baseStyle={{
                     width: defaultContentWidth,
                     ...defaultTextStyle(theme),
                     ...contentStyle,
                 }}
                 // systemFonts={[
-                //     theme.font.Thin,
+                //     AppFont.Thin,
                 //     AppFont.Regular,
                 //     AppFont.Medium,
                 //     AppFont.Bold,
                 // ]}
-                contentWidth={width}
                 {...rest}
                 tagsStyles={{ ...tagStyles(theme), ...props.tagsStyles }}
                 source={{ html: htmlContent }}
@@ -173,6 +190,12 @@ const tagStyles = (theme: ITheme) => {
         li: { ...defaultTextStyle(theme), marginLeft: 6, marginBottom: 10, marginTop: -3, paddingBottom: 3 },
         ul: defaultTextStyle(theme),
         ol: defaultTextStyle(theme),
+        td: defaultTextStyle(theme),
+        tr: defaultTextStyle(theme),
+        table: {
+            flex: 1,
+            fontSize: 10
+        }
     }
 }
 
@@ -191,6 +214,7 @@ export const createTagStyles = (textStyle: any) => {
         li: { ...textStyle, marginLeft: 6, marginBottom: 10, marginTop: -3, paddingBottom: 3 },
         ul: textStyle,
         ol: textStyle,
+        td: textStyle,
     };
 }
 
