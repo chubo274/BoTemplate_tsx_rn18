@@ -29,6 +29,7 @@ const TakePhotoUpload = React.memo((props: ITakePhotoUpload) => {
     const devices = useCameraDevices();
     const device = devices.front
     const cameraRef = useRef<Camera>(null)
+    const [modalIsOpen, setModalIsOpen] = useState(false)
     const [cameraType, setCameraType] = useState(device);
     const refRawSizeImg = useRef<{ height: number, width: number }>({ height: 600, width: 800 });
 
@@ -51,17 +52,29 @@ const TakePhotoUpload = React.memo((props: ITakePhotoUpload) => {
         if (devices == null) {
             return <View style={{ flex: 1 }} />
         } else {
-            return <Camera
-                style={{ flex: 1 }}
-                device={cameraType || device}
-                isActive={true}
-                enableZoomGesture
-                ref={cameraRef}
-                photo={true}
-                captureGroup='captured'
-            />
+            if (modalIsOpen) {
+                return <Camera
+                    style={{ flex: 1 }}
+                    device={cameraType || device}
+                    isActive={true}
+                    enableZoomGesture
+                    ref={cameraRef}
+                    photo={true}
+                    captureGroup='captured'
+                />
+            } else {
+                return <View style={{ flex: 1 }} />
+            }
         }
-    }, [cameraType, device, devices])
+    }, [cameraType, device, devices, modalIsOpen])
+
+    const cleanImagePickerCrop = useCallback(() => {
+        ImagePicker.clean().then(() => {
+            // console.log('removed all tmp images from tmp directory');
+        }).catch(e => {
+            // alert(e);
+        });
+    }, [])
 
     const cropPicker = useCallback((photo: any) => {
         const pathByPlatform = Platform.select({
@@ -88,9 +101,11 @@ const TakePhotoUpload = React.memo((props: ITakePhotoUpload) => {
                 selectImage?.(image?.path, { uri: image?.path ?? '', type: image?.mime, name: 'name' });
             }).catch(e => {
                 // console.log('cropPicker = useCallback((photo: any)', e);
+            }).finally(async () => {
+                Platform.OS == 'android' && await cleanImagePickerCrop()
             })
         }
-    }, [selectImage, t])
+    }, [selectImage, t, cleanImagePickerCrop])
 
     const takePhoto = useCallback(async () => {
         try {
@@ -105,6 +120,8 @@ const TakePhotoUpload = React.memo((props: ITakePhotoUpload) => {
                 refRawSizeImg.current.height = photo?.height || 600
                 refRawSizeImg.current.width = photo?.width || 800
                 modalRef.current?.close()
+                setModalIsOpen(false)
+                // selectImage?.(photo?.path, { uri: photo?.path ?? '', type: photo?.mime, name: 'name' });
                 cropPicker(photo)
             }
         } catch (error) {
@@ -159,17 +176,16 @@ const TakePhotoUpload = React.memo((props: ITakePhotoUpload) => {
             compressImageQuality: Platform.OS == 'ios' ? 0.99 : 1,
             cropping: false,
             mediaType: 'photo',
-        }).then(image => {
+        }).then((image) => {
             modalRef.current?.close()
             cropPicker(image)
-        }
-        );
+        });
     }, [cropPicker])
 
     const renderSafeview = useMemo(() => {
         return <SafeAreaView style={styles.safeViewContainer} >
             <StatusBar barStyle={'light-content'} />
-            <View style={{ flex: 1 }} >
+            <View style={{ flex: 1, position: 'relative' }} >
                 <TouchableOpacity onPress={() => modalRef.current?.close()} activeOpacity={1} style={styles.safeViewHeader}>
                     <CaretLeft size={16} weight="bold" color={theme.color.textColor.white} />
                 </TouchableOpacity>
@@ -214,6 +230,8 @@ const TakePhotoUpload = React.memo((props: ITakePhotoUpload) => {
                 scrollViewProps={{
                     scrollEnabled: false
                 }}
+                onOpened={() => setModalIsOpen(true)}
+                onClosed={() => setModalIsOpen(false)}
             >
                 {renderSafeview}
             </AppModal>
