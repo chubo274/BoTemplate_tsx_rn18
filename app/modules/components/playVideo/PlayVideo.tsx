@@ -50,6 +50,7 @@ export const PlayVideo = React.memo((props: IPlayVideo) => {
                 }}
                 style={styles.backgroundVideo}
                 resizeMode={'cover'}
+                ignoreSilentSwitch={'ignore'}
                 onError={(e: any) => emitShowToast({ isShowIconLeft: true, status: IAppToastStatus.Error, toastMessage: t('cantProcessFile') })}
             />
         </View>
